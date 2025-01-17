@@ -1,4 +1,4 @@
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -13,11 +13,15 @@
     <header></header>
     <main>
         <div id="search-container">
-            <input type="text" id="search-input" placeholder="Nom de film">
-            <button id="search-button" onclick={getMovies()}>Chercher</button>
-        </div>
-        <div id="search-container">
-            <p>Vous pouvez chercher un film par titre ou par année de sortie.</p>
+            <input type="text" id="title-input" placeholder="Video Name">
+            <input type="text" id="year-input" placeholder="Realease Year">
+            <select id="type-select">
+                <option value="" >All type</option>
+                <option value="movie">Movie</option>
+                <option value="series">Series</option>
+                <option value="episode">Episode</option>
+            </select>
+            <button id="search-button">Search</button>
         </div>
         <div id="movies-container"></div>
         <div id="pagination-container"></div>

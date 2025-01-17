@@ -43,6 +43,9 @@ body {
     font-size: 16px;
     font-family: 'Plus Jakarta Sans Variable';
 }
+button, .movie-card  {
+    cursor: pointer;
+}
 
 /* HEADER */
 
@@ -63,7 +66,7 @@ header {
     align-items: center;
     margin: 25px auto;
 }
-#search-input {
+#title-input, #year-input, #type-select {
     width: 300px;
     height: 30px;
     padding: 5px;
@@ -71,7 +74,7 @@ header {
     border: none;
     border-radius: 5px;
 }
-#search-input:focus {
+#title-input:focus, #year-input:focus {
     outline: none;
 }
 #search-button {
@@ -81,6 +84,24 @@ header {
     background: var(--Yellow);
     border: none;
     border-radius: 5px;
+}
+
+/* ERROR */
+.error-container {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+.error-img {
+    width: 100%;
+    margin-bottom: 50px;
+}
+.error-text {
+    font-size: 20px;
+    text-align: center;
 }
 
 /* BODY */
@@ -112,6 +133,9 @@ header {
 .noImage {
     width: 280px;
     height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: var(--backGDarker-deco);
     border-radius: 5px;
 }
@@ -143,7 +167,6 @@ header {
     border: none;
     border-radius: 5px;
     margin: 0 5px;
-    cursor: pointer;
 }
 .current-page {
     background: var(--backG-deco);
@@ -154,23 +177,28 @@ header {
 /* DETAIL PAGE */
 
 .movie-details-card {
-    width: fit-content;
+    width: 60%;
     display: flex;
     background: var(--backG-deco);
     border: none;
     border-radius: 10px;
     padding: 20px;
-    margin: 50px auto;
+    margin: auto;
+}
+.movie-details-card img {
+    width: 40%;
+    height: fit-content;
+    margin-right: 20px;
 }
 .right-col {
+    width: 60%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 20px;
 }
 .movie-info {
-    width: 400px;
+    width: 100%;
 }
 .movie-info > p {
     margin: 20px 0;
@@ -181,7 +209,6 @@ header {
     background: var(--Yellow);
     border: none;
     border-radius: 5px;
-    cursor: pointer;
 }
 
 /* FOOTER */

@@ -3,42 +3,59 @@ const ApiUrl = "http://www.omdbapi.com/";
 
 let currentPage = 1;
 
-const searchValue = document.getElementById('search-input').value; // Search input value
-const searchButton = document.getElementById('search-input'); // Search button Enter key event
+const titleInput = document.getElementById('title-input'); // Search input value
+const typeInput = document.getElementById('type-select'); // Search input value
+const yearInput = document.getElementById('year-input'); // Search input value
+const searchButton = document.getElementById('search-button'); // Search button
 
 /* --------------------------------------------------------- MAIN PAGE --------------------------------------------------------- */
 /* --------------------------------------------------------- MAIN PAGE --------------------------------------------------------- */
-
 
 async function getMovies() {
+    const titleValue = titleInput.value;
+    const typeValue = typeInput.value;
+    const yearValue = yearInput.value;
 
-    const isYear = /^\d{4}$/.test(searchValue); // Check if the search value is a year
-    if (!isYear) {
-        response = await fetch(`${ApiUrl}?apikey=${ApiKey}&s=${encodeURIComponent(searchValue)}&page=${currentPage}`);
-    } else {
-        response = await fetch(`${ApiUrl}?apikey=${ApiKey}&s=${encodeURIComponent(searchValue)}&y=${encodeURIComponent(searchValue)}page=${currentPage}`);
-    }
+    const response = await fetch(`${ApiUrl}?apikey=${ApiKey}&s=${encodeURIComponent(titleValue)}&y=${encodeURIComponent(yearValue)}&type=${typeValue}&page=${currentPage}`);
 
-    data = await response.json();
+    const data = await response.json();
 
     const moviesContainer = document.getElementById('movies-container');
     moviesContainer.innerHTML = ''; // Clear previous results
 
-    if (data.Search) {
+    if (data.Response === 'False') {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-container';
+        const errorImg = document.createElement('img');
+        errorImg.className = 'error-img';
+        errorImg.src = 'https://img.freepik.com/vecteurs-libre/theatre-scene-cinema-rangee-chaises-rouges_1017-36805.jpg?t=st=1737129349~exp=1737132949~hmac=2270d4b7e53ee7ec7a8d5ca22a198373a89d7d68280f1dba8bc7c891cd9d333b&w=1380';
+        errorImg.alt = 'Error image';
+
+        const error = document.createElement('p');
+        error.className = 'error-text';
+
+        if (!titleValue) {
+            error.textContent = "Write a movie title to search.";
+        } else {
+            error.textContent = "Verify the information and try again.";
+        }
+        errorDiv.appendChild(errorImg);
+        errorDiv.appendChild(error);
+        moviesContainer.appendChild(errorDiv);
+    }
+    if (data.Response === 'True' && data.Search) {
         data.Search.forEach(movie => {
             const moviesCard = document.createElement('div');
             moviesCard.className = "movie-card";
             moviesCard.addEventListener('click', () => getMovieDetails(movie.imdbID)); // Click event to show movie details
 
+            const noImage = document.createElement('div');
+            noImage.className = 'noImage';
+            const noImageText = document.createElement('p');
+            noImageText.textContent = 'Pas d\'image disponible';
             const image = document.createElement('img');
-
-            if (movie.Poster === 'N/A') {
-                const noImage = document.createElement('div');
-                noImage.className = 'noImage';
-            } else {
-                image.src = movie.Poster;
-                image.alt = `${movie.Title} poster`;
-            }
+            image.src = movie.Poster;
+            image.alt = `${movie.Title} poster`;
 
             const info = document.createElement('div');
 
@@ -51,7 +68,12 @@ async function getMovies() {
             info.appendChild(title);
             info.appendChild(year);
 
-            moviesCard.appendChild(image);
+            if (movie.Poster === 'N/A') {
+                noImage.appendChild(noImageText);
+                moviesCard.appendChild(noImage);
+            } else {
+                moviesCard.appendChild(image);
+            }
             moviesCard.appendChild(info);
             moviesContainer.appendChild(moviesCard);
         });
@@ -138,8 +160,6 @@ async function getMovieDetails(movieID) {
     const response = await fetch(`${ApiUrl}?apikey=${ApiKey}&i=${movieID}`);
     const movie = await response.json();
 
-    console.log("movie details", movie);
-
     const moviesContainer = document.getElementById('movies-container');
     moviesContainer.innerHTML = ''; // Clear previous results
 
@@ -190,19 +210,23 @@ async function getMovieDetails(movieID) {
     moviesContainer.appendChild(movieDetailsCard);
 }
 
-
-
-
+/* --------------------------------------------------------- EVENT LISTENERS --------------------------------------------------------- */
 // Initial load
 document.addEventListener('DOMContentLoaded', () => {
 
     // Event listener for the search button click
-    document.getElementById('search-button').addEventListener('click', () => {
+    searchButton.addEventListener('click', () => {
         currentPage = 1; // Reset to first page on new search
         getMovies();
     });
     // Event listener for the search Enter key
-    document.getElementById('search-input').addEventListener('keydown', (event) => {
+    titleInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            currentPage = 1; // Reset to first page on new search
+            getMovies();
+        }
+    });
+    yearInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             currentPage = 1; // Reset to first page on new search
             getMovies();
