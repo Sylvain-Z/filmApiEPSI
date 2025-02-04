@@ -7,6 +7,7 @@ const titleInput = document.getElementById('title-input'); // Search input value
 const typeInput = document.getElementById('type-select'); // Search input value
 const yearInput = document.getElementById('year-input'); // Search input value
 const searchButton = document.getElementById('search-button'); // Search button
+const welcomeDiv = document.getElementById('welcome-container'); // Welcome div
 
 /* --------------------------------------------------------- MAIN PAGE --------------------------------------------------------- */
 /* --------------------------------------------------------- MAIN PAGE --------------------------------------------------------- */
@@ -22,8 +23,9 @@ async function getMovies() {
 
     const moviesContainer = document.getElementById('movies-container');
     moviesContainer.innerHTML = ''; // Clear previous results
+    welcomeDiv.style.display = 'none'; // Hide welcome div
 
-    if (data.Response === 'False') {
+    if (data.Response === 'False') { // Handle error
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-container';
         const errorImg = document.createElement('img');
